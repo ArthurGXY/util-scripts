@@ -4,15 +4,20 @@ if [[ ! -d DST_DIR ]]; then
     mkdir $DST_DIR
 fi
 
+DST_DIR="$(xdg-user-dir PICTURES)/screenshots/"
 
-FILE=$HOME/图片/screenshots/screenshot_$(date "+%Y_%m%d-%H%M%S").png
+if [[ ! -d DST_DIR ]]; then
+    mkdir -p "${DST_DIR}"
+fi
+
+FILE="${DST_DIR}"screenshot_$(date "+%Y_%m%d-%H%M%S").png
 #grim -g "$(slurp)" "$FILE"
 #wl-copy < "$FILE"
-grimblast --freeze copysave area "$FILE"
+saved_as=$(grimblast --freeze copysave area "$FILE")
 
 # Send the notification with an action
-ACTION=$(dunstify -a "Simple Screen Shot" "Screenshot Taken" \
-  "Click to open in Thunar or view." \
+ACTION=$(dunstify -a "Simple Screen Shot" "Screenshot Taken." \
+  "Click to open in Thunar or view: ${saved_as}" \
   --action="openThunar,Show folder" \
   --action="openImg,View" \
   --action="editImg,Edit" \
